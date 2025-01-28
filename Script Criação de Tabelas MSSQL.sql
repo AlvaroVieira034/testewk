@@ -5,7 +5,7 @@ GO
 USE bdtestewk;
 GO
 
--- Iniciar transação
+-- Iniciar transaÃ§Ã£o
 BEGIN TRANSACTION;
 
 -- Criar tabela de produtos
@@ -23,7 +23,7 @@ INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('PLACA DE VIDEO GEFOR
 INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('KIT TECLADO E MOUSE DELL', 128);
 INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('MOUSE PAD EM COURO', 45);
 INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('ROTEADOR HUAWEI', 268);
-INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('PLACA MAE INTEL I7 12a GERAÇÃO', 1580);
+INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('PLACA MAE INTEL I7 12a GERAÃ‡ÃƒO', 1580);
 INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('NOTEBOOK DELL GAMER', 12760);
 INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('MONITOR SAMSUNG 24 POL', 1138);
 INSERT INTO tab_produto (des_descricao, val_preco) VALUES ('MOUSE SEM FIO LOGITECH', 85);
@@ -46,7 +46,7 @@ CREATE TABLE tab_cliente (
    des_nomecliente VARCHAR(100),
    des_cidade VARCHAR(100),
    des_uf VARCHAR(2),
-   des_cep VARCHAR(10),
+   des_cep VARCHAR(10)
 );
 GO
 
@@ -65,7 +65,7 @@ INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('DIEGO TAR
 INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('EDER ALEIXO', 'VESPASIANO', 'MG');
 INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('SIMONE SILVA', 'BELO HORIZONTE', 'MG');
 INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('MARCELO VIEIRA', 'BELO HORIZONTE', 'MG');
-INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('MARIA TERESA FRANÇA', 'ARAGUARI', 'MG');
+INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('MARIA TERESA FRANÃ‡A', 'ARAGUARI', 'MG');
 INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('RAQUEL COSTA', 'BELO HORIZONTE', 'MG');
 INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('CAROLINA ANDRADE', 'NOVA LIMA', 'MG');
 INSERT INTO tab_cliente (des_nomecliente, des_cidade, des_uf) VALUES ('HULK PARAIBA', 'BELO HORIZONTE', 'MG');
@@ -157,6 +157,6 @@ INSERT INTO tab_pedido_item (cod_pedido, cod_produto, val_quantidade, val_precou
 INSERT INTO tab_pedido_item (cod_pedido, cod_produto, val_quantidade, val_precounitario, val_totalitem) VALUES (20, 3, 1, 865, 865);
 GO
 
--- Confirmar a transação
+-- Confirmar a transaÃ§Ã£o
 COMMIT TRANSACTION;
 GO
