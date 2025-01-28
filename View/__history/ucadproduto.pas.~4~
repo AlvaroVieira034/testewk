@@ -1,0 +1,64 @@
+unit ucadproduto;
+
+interface
+
+{$REGION 'Uses'}
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, UCadastroPadrao, Vcl.Buttons, Vcl.StdCtrls, Vcl.ExtCtrls,
+  Data.DB, Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error,
+  FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
+  FireDAC.Phys, FireDAC.Phys.MSSQL, FireDAC.Phys.MSSQLDef, FireDAC.VCLUI.Wait, FireDAC.Stan.Param,
+  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  conexao, produto.model, produto.controller, produto.repository, produto.service;
+
+{$ENDREGION}
+
+type
+  TOperacao = (opInicio, opNovo, opEditar, opNavegar);
+  TFrmCadProduto = class(TFrmCadastroPadrao)
+
+    PnlPesquisar: TPanel;
+    Label4: TLabel;
+    BtnPesquisar: TSpeedButton;
+    EdtPesquisar: TEdit;
+    CbxFiltro: TComboBox;
+    DBGridProdutos: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label6: TLabel;
+    EdtPrecoUnitario: TEdit;
+    EdtCodProduto: TEdit;
+    EdtDescricao: TEdit;
+  private
+    ValoresOriginais: array of string;
+    FProduto: TProduto;
+    FProdutoController: TProdutoController;
+
+    procedure PreencherGridProdutos;
+    procedure PreencherCamposForm;
+    procedure LimpaCamposForm(AOperacao: TOperacao);
+    function GravarDados: Boolean;
+    function ValidarDados: Boolean;
+    procedure MostrarMensagemErro(AErro: TCampoInvalido);
+    procedure VerificaBotoes(AOperacao: TOperacao);
+    function GetDataSource: TDataSource;
+
+
+  public
+    FOperacao: TOperacao;
+    DsProdutos: TDataSource;
+
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+  end;
+
+var
+  FrmCadProduto: TFrmCadProduto;
+
+implementation
+
+{$R *.dfm}
+
+end.

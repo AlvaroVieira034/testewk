@@ -1,0 +1,42 @@
+unit ucadcliente;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ucadastropadrao, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids;
+
+type
+  TFrmCadastroPadrao1 = class(TFrmCadastroPadrao)
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label10: TLabel;
+    BtnPesquisarCep: TSpeedButton;
+    Label3: TLabel;
+    EdtCep: TEdit;
+    EdtCidade: TEdit;
+    EdtUF: TEdit;
+    EdtCodigoCliente: TEdit;
+    EdtNome: TEdit;
+    PnlPesquisar: TPanel;
+    BtnPesquisar: TSpeedButton;
+    Label12: TLabel;
+    EdtPesquisar: TEdit;
+    CbxFiltro: TComboBox;
+    DbGridClientes: TDBGrid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCadastroPadrao1: TFrmCadastroPadrao1;
+
+implementation
+
+{$R *.dfm}
+
+end.

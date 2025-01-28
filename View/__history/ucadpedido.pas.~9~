@@ -1,0 +1,309 @@
+unit ucadpedido;
+
+interface
+
+{$REGION 'Uses'}
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Forms, Vcl.Dialogs, UCadastroPadrao, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids,
+  Vcl.DBCtrls, Vcl.Controls, conexao, produto.model, produto.controller, produto.repository, produto.service,
+  cliente.model, cliente.controller, pedido.model, pedidoitens.model, pedido.controller, pedido.repository,
+  ipedido.repository, pedido.service, ipedido.service, pedidoitens.controller, cliente.repository,
+  iinterface.repository, cliente.service, iinterface.service, untFormat, upesqpedidos, System.Generics.Collections;
+
+{$ENDREGION}
+
+type
+  TOperacao = (opInicio, opNovo, opEditar, opNavegar, opErro);
+  TFrmCadPedido = class(TFrmCadastroPadrao)
+    Label10: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    EdtCodPedido: TEdit;
+    EdtDataPedido: TEdit;
+    EdtTotalPedido: TEdit;
+    EdtQuantidade: TEdit;
+    EdtPrecoUnit: TEdit;
+    EdtPrecoTotal: TEdit;
+    LCbxProdutos: TDBLookupComboBox;
+    BtnAddItemGrid: TButton;
+    BtnDelItemGrid: TButton;
+    DbGridItensPedido: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label3: TLabel;
+    BtnPesquisar: TSpeedButton;
+    EdtCodCliente: TEdit;
+    LcbxNomeCliente: TDBLookupComboBox;
+    BtnInserirItens: TButton;
+    BtnLimpaCampos: TSpeedButton;
+    MTblPedidoItem: TFDMemTable;
+    MTblPedidoItemCOD_PRODUTO: TIntegerField;
+    MTblPedidoItemDES_DESCRICAO: TStringField;
+    MTblPedidoItemVAL_QUANTIDADE: TIntegerField;
+    MTblPedidoItemVAL_PRECOUNITARIO: TFloatField;
+    MTblPedidoItemVAL_TOTALITEM: TFloatField;
+    DsPedidoItem: TDataSource;
+    MTblPedidoItemID_PEDIDO: TIntegerField;
+    MTblPedidoItemCOD_PEDIDO2: TIntegerField;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BtnSairClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+
+  private
+    ValoresOriginais: array of string;
+    TblProdutos: TFDQuery;
+    TblClientes: TFDQuery;
+    DsProdutos: TDataSource;
+    DsClientes: TDataSource;
+    FProdutoController: TProdutoController;
+    FClienteController: TClienteController;
+    FPedido: TPedido;
+    FPedidoController: TPedidoController;
+    FPedidoItens: TPedidoItens;
+    FPedidoItensController: TPedidoItensController;
+    TransacaoPedidos : TFDTransaction;
+
+    procedure CarregarPedidos(ACodPedido: Integer);
+    procedure InserirPedidoItens;
+    function GravarDados: Boolean;
+    procedure ExcluirPedidos;
+    function ValidarDados(ATipoDados: string): Boolean;
+    procedure LimpaCamposPedido;
+    procedure LimpaCamposItens;
+    procedure PreencheCdsPedidoItem;
+    procedure VerificaBotoes(AOperacao: TOperacao);
+    procedure HabilitarBotaoIncluirItens;
+
+  public
+    FOperacao: TOperacao;
+    pesqPedido: Boolean;
+    codigoPedido: Integer;
+
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  end;
+
+var
+  FrmCadPedido: TFrmCadPedido;
+  totPedido, totPedidoAnt: Double;
+  idItem: Integer;
+  alterouGrid: Boolean;
+  sErro: string;
+
+implementation
+
+{$R *.dfm}
+
+{ TFrmCadPedido }
+
+
+constructor TFrmCadPedido.Create(AOwner: TComponent);
+begin
+  inherited;
+  TblProdutos := TFDQuery.Create(nil);
+  TblClientes := TFDQuery.Create(nil);
+  DsProdutos := TDataSource.Create(nil);
+  DsClientes := TDataSource.Create(nil);
+  TransacaoPedidos := TFDTransaction.Create(nil);
+end;
+
+destructor TFrmCadPedido.Destroy;
+begin
+  TblProdutos.Free;
+  TblClientes.Free;
+  DsProdutos.Free;
+  DsClientes.Free;
+  TransacaoPedidos.Free;
+  inherited Destroy;
+end;
+
+procedure TFrmCadPedido.FormCreate(Sender: TObject);
+var sCampo: string;
+begin
+  inherited;
+  if TConexao.GetInstance.Connection.TestarConexao then
+  begin
+    // Define Transacao pra Pedidos
+    TConexao.GetInstance.Connection.InciarTransacao;
+    TransacaoPedidos := TConexao.GetInstance.Connection.CriarTransaction;
+
+    // Cria Tabelas
+    TblProdutos := TConexao.GetInstance.Connection.CriarQuery;
+    TblClientes := TConexao.GetInstance.Connection.CriarQuery;
+
+    // Cria DataSource
+    DsClientes := TConexao.GetInstance.Connection.CriarDataSource;
+    DsProdutos := TConexao.GetInstance.Connection.CriarDataSource;
+
+    // Atribui DataSet às tabelas
+    DsClientes.DataSet := TblClientes;
+    DsProdutos.DataSet := TblProdutos;
+
+    //Instancias Classes
+    FProdutoController := TProdutoController.Create(TProdutoRepository.Create, TProdutoService.Create);
+    FClienteController := TClienteController.Create(TClienteRepository.Create, TClienteService.Create);
+    FPedido := TPedido.Create;
+    FPedidoController := TPedidoController.Create(TPedidoRepository.Create, TPedidoService.Create);
+    FPedidoItens := TPedidoItens.Create;
+    FPedidoItensController := TPedidoItensController.Create;
+
+    // Variáveis locais
+    sCampo := 'vda.dta_pedido';
+    totPedido := 0;
+    pesqPedido := False;
+    SetLength(ValoresOriginais, 4);
+    FOperacao := opInicio;
+    MTblPedidoItem.CreateDataSet;
+
+    // Define configuração DbLookupComboBox
+    LcbxNomeCliente.KeyField := 'cod_cliente';
+    LcbxNomeCliente.ListField := 'des_nomecliente';
+    LcbxNomeCliente.ListSource := DsClientes;
+
+    LCbxProdutos.KeyField := 'cod_produto';
+    LCbxProdutos.ListField := 'des_descricao';
+    LCbxProdutos.ListSource := DsProdutos;
+  end
+  else
+  begin
+    ShowMessage('Não foi possível conectar ao banco de dados!');
+    Close;
+  end;
+end;
+
+procedure TFrmCadPedido.FormShow(Sender: TObject);
+begin
+  inherited;
+  totPedido := 0;
+  FClienteController.PreencherComboClientes(TblClientes);
+  FProdutoController.PreencherComboProdutos(TblProdutos);
+
+  DbGridItensPedido.Columns[0].Width := 320;
+  DbGridItensPedido.Columns[1].Width := 90;
+  DbGridItensPedido.Columns[2].Width := 115;
+  DbGridItensPedido.Columns[3].Width := 115;
+  VerificaBotoes(FOperacao);
+end;
+
+procedure TFrmCadPedido.CarregarPedidos(ACodPedido: Integer);
+var Item: TPedidoItens;
+    ItensPedido: TList<TPedidoItens>;
+begin
+  MTblPedidoItem.Close;
+  MTblPedidoItem.CreateDataSet;
+
+  if ACodPedido > 0 then
+    codigoPedido := ACodPedido;
+
+  if not FPedidoController.CarregarCampos(FPedido, codigoPedido) then
+  begin
+    MessageDlg('Pedido não encontada!', mtInformation, [mbOK], 0);
+    LimpaCamposPedido();
+    EdtCodPedido.SetFocus;
+    Exit;
+  end;
+
+  with FPedido do
+  begin
+    EdtCodPedido.Text := IntToStr(Cod_Pedido);
+    EdtDataPedido.Text := DateToStr(Dta_Pedido);
+    EdtCodCliente.Text := IntToStr(Cod_Cliente);
+    EdtTotalPedido.Text := FormatFloat('######0.00', Val_Pedido);
+  end;
+
+  // Carregar os itens da Pedido usando a controller
+  ItensPedido := FPedidoItensController.CarregarItensPedido(codigoPedido);
+  try
+    for Item in ItensPedido do
+    begin
+      MTblPedidoItem.Append;
+      MTblPedidoItemID_Pedido.AsInteger := Item.Id_Pedido;
+      MTblPedidoItemCOD_Pedido.AsInteger := Item.Cod_Pedido;
+      MTblPedidoItemCOD_PRODUTO.AsInteger := Item.Cod_Produto;
+      MTblPedidoItemDES_DESCRICAO.AsString := Item.Des_Descricao;
+      MTblPedidoItemVAL_QUANTIDADE.AsInteger := Item.Val_Quantidade;
+      MTblPedidoItemVAL_PRECOUNITARIO.AsFloat := Item.Val_PrecoUnitario;
+      MTblPedidoItemVAL_TOTALITEM.AsFloat := Item.Val_TotalItem;
+      MTblPedidoItem.Post;
+    end;
+  finally
+    ItensPedido.Free;
+  end;
+end;
+
+procedure TFrmCadPedido.InserirPedidoItens;
+begin
+
+end;
+
+function TFrmCadPedido.GravarDados: Boolean;
+begin
+
+end;
+
+procedure TFrmCadPedido.ExcluirPedidos;
+begin
+
+end;
+
+
+
+function TFrmCadPedido.ValidarDados(ATipoDados: string): Boolean;
+begin
+
+end;
+
+procedure TFrmCadPedido.LimpaCamposItens;
+begin
+
+end;
+
+procedure TFrmCadPedido.LimpaCamposPedido;
+begin
+
+end;
+
+procedure TFrmCadPedido.PreencheCdsPedidoItem;
+begin
+
+end;
+
+procedure TFrmCadPedido.VerificaBotoes(AOperacao: TOperacao);
+begin
+
+end;
+
+procedure TFrmCadPedido.HabilitarBotaoIncluirItens;
+begin
+
+end;
+
+procedure TFrmCadPedido.BtnSairClick(Sender: TObject);
+begin
+  inherited;
+  Close;
+end;
+
+procedure TFrmCadPedido.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  Action := caFree;
+end;
+
+procedure TFrmCadPedido.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  inherited;
+  if Key = VK_RETURN then
+    perform(WM_NEXTDLGCTL,0,0)
+end;
+
+
+end.

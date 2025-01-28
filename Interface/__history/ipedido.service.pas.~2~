@@ -1,0 +1,19 @@
+unit ipedido.service;
+
+interface
+
+uses cliente.model, produto.model, Data.DB, System.SysUtils;
+
+type
+  IInterfaceRepository<T> = interface
+    ['{F36A87F5-2C35-4339-8EAF-8AD1E33FE9F4}']
+    function Inserir(AEntity: T; out sErro: string): Boolean;
+    function Alterar(AEntity: T; ACodigo: Integer; out sErro: string): Boolean;
+    function Excluir(ACodigo: Integer; out sErro : string): Boolean;
+    function ExecutarTransacao(AOperacao: TProc; var sErro: string): Boolean;
+
+  end;
+
+implementation
+
+end.

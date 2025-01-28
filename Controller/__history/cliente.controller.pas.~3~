@@ -1,0 +1,96 @@
+unit cliente.controller;
+
+interface
+
+uses cliente.model, cliente.repository, iinterface.repository, cliente.service, iinterface.service, conexao,
+     System.SysUtils, FireDAC.Comp.Client, FireDAC.Stan.Param, Data.DB, untFormat, biblioteca;
+
+type
+  TCampoInvalido = (ciNome, ciCidade, ciUF);
+  TClienteController = class
+
+  private
+    FCliente: TCliente;
+    FClienteRepository : TClienteRepository;
+    FClienteService : TClienteService;
+
+  public
+    constructor Create(AClienteRepository: IInterfaceRepository<TCliente>; AClienteService: IInterfaceService<TCliente>);
+    destructor Destroy; override;
+    procedure PreencherGridClientes(APesquisa, ACampo: string);
+    procedure PreencherCamposForm(FCliente: TCliente; ACodigo: Integer);
+    procedure PreencherComboClientes(TblComboClientes: TFDQuery);
+    function Inserir(FCliente: TCliente; out sErro: string): Boolean;
+    function Alterar(FCliente: TCliente; ACodigo: Integer; out sErro: string): Boolean;
+    function Excluir(ACodigo: Integer; out sErro : string): Boolean;
+    function ValidarDados(const ANomeCliente, ACidade, AUF: string; out AErro: TCampoInvalido): Boolean;
+    function ExecutarTransacao(AOperacao: TProc; var sErro: string): Boolean;
+    function GetDataSource: TDataSource;
+
+  end;
+
+implementation
+
+{ TClienteController }
+
+constructor TClienteController.Create(AClienteRepository: IInterfaceRepository<TCliente>; AClienteService: IInterfaceService<TCliente>);
+begin
+  FCliente := TCliente.Create();
+  FClienteRepository := TClienteRepository.Create;
+  FClienteService := TClienteService.Create;
+end;
+
+destructor TClienteController.Destroy;
+begin
+  FCliente.Free;
+  FClienteRepository.Free;
+  FClienteService.Free;
+  inherited Destroy;
+end;
+
+function TClienteController.Inserir(FCliente: TCliente; out sErro: string): Boolean;
+begin
+
+end;
+
+function TClienteController.Alterar(FCliente: TCliente; ACodigo: Integer; out sErro: string): Boolean;
+begin
+
+end;
+
+function TClienteController.Excluir(ACodigo: Integer; out sErro: string): Boolean;
+begin
+
+end;
+
+procedure TClienteController.PreencherGridClientes(APesquisa, ACampo: string);
+begin
+
+end;
+
+procedure TClienteController.PreencherCamposForm(FCliente: TCliente; ACodigo: Integer);
+begin
+
+end;
+
+procedure TClienteController.PreencherComboClientes(TblComboClientes: TFDQuery);
+begin
+
+end;
+
+function TClienteController.ValidarDados(const ANomeCliente, ACidade, AUF: string; out AErro: TCampoInvalido): Boolean;
+begin
+
+end;
+
+function TClienteController.ExecutarTransacao(AOperacao: TProc; var sErro: string): Boolean;
+begin
+
+end;
+
+function TClienteController.GetDataSource: TDataSource;
+begin
+
+end;
+
+end.

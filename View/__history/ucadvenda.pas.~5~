@@ -1,0 +1,61 @@
+unit ucadvenda;
+
+interface
+
+
+{$REGION 'Uses'}
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Forms, Vcl.Dialogs, UCadastroPadrao, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, Data.DB,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids,
+  Vcl.DBCtrls, Vcl.Controls, conexao, produto.model, produto.controller, produto.repository, produto.service,
+  cliente.model, cliente.controller, pedido.model, pedidoitens.model, pedido.controller, pedido.repository,
+  ipedido.repository, pedido.service, ipedido.service, pedidoitens.controller, cliente.repository,
+  iinterface.repository, cliente.service, iinterface.service, untFormat, upesqPedidos, System.Generics.Collections;
+
+{$ENDREGION}
+
+type
+  TFrmCadPedido = class(TFrmCadastroPadrao)
+    Label10: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    EdtQuantidade: TEdit;
+    EdtPrecoUnit: TEdit;
+    EdtPrecoTotal: TEdit;
+    LCbxProdutos: TDBLookupComboBox;
+    BtnAddItemGrid: TButton;
+    BtnDelItemGrid: TButton;
+    DbGridItensPedido: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label3: TLabel;
+    BtnPesquisar: TSpeedButton;
+    EdtCodPedido: TEdit;
+    EdtDataPedido: TEdit;
+    EdtTotalPedido: TEdit;
+    EdtCodCliente: TEdit;
+    LcbxNomeCliente: TDBLookupComboBox;
+    BtnInserirItens: TButton;
+    BtnLimpaCampos: TSpeedButton;
+    procedure BtnPesquisarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCadPedido: TFrmCadPedido;
+
+implementation
+
+{$R *.dfm}
+
+
+
+end.

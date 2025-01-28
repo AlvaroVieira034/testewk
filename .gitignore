@@ -1,0 +1,8 @@
+# Ignorar diretórios de compilação
+/win32/
+
+
+# Ignorar arquivos de configuração de sistema
+TesteTecnicoWK.exe
+
+

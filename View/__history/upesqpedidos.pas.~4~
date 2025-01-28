@@ -1,0 +1,78 @@
+unit upesqpedidos;
+
+interface
+
+{$REGION 'Uses'}
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, pedido.model,
+  pedido.controller, pedido.repository, ipedido.repository, pedido.service, ipedido.service,
+  FireDAC.Comp.Client, Vcl.Buttons, Vcl.ExtCtrls;
+
+{$ENDREGION}
+
+
+type
+  TFrmPesqPedidos = class(TForm)
+    PnlPesquisar: TPanel;
+    Label4: TLabel;
+    BtnPesquisar: TSpeedButton;
+    BtnSelecionar: TSpeedButton;
+    BtnSair: TSpeedButton;
+    EdtPesquisar: TEdit;
+    CbxFiltro: TComboBox;
+    GroupBox1: TGroupBox;
+    DbGridPedidos: TDBGrid;
+
+  private
+    TblPedidos: TFDQuery;
+    DsPedidos: TDataSource;
+    FPedido: TPedido;
+    PedidoController: TPedidoController;
+
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure PreencherGrid(TblPedidos: TFDQuery; APesquisa, ACampo: string);
+    procedure CriarTabelas;
+    procedure CriarCamposTabelas;
+  end;
+
+var
+  FrmPesqPedidos: TFrmPesqPedidos;
+
+implementation
+
+{$R *.dfm}
+
+{ TFrmPesqPedidos }
+
+constructor TFrmPesqPedidos.Create(AOwner: TComponent);
+begin
+  inherited;
+
+end;
+
+destructor TFrmPesqPedidos.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TFrmPesqPedidos.PreencherGrid(TblPedidos: TFDQuery; APesquisa, ACampo: string);
+begin
+
+end;
+
+procedure TFrmPesqPedidos.CriarTabelas;
+begin
+
+end;
+
+procedure TFrmPesqPedidos.CriarCamposTabelas;
+begin
+
+end;
+
+
+end.

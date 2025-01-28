@@ -1,0 +1,37 @@
+unit ucadproduto;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ucadastropadrao, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ExtCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids;
+
+type
+  TFrmCadProduto = class(TFrmCadastroPadrao)
+    PnlPesquisar: TPanel;
+    Label4: TLabel;
+    BtnPesquisar: TSpeedButton;
+    EdtPesquisar: TEdit;
+    CbxFiltro: TComboBox;
+    DBGridProdutos: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label6: TLabel;
+    EdtPrecoUnitario: TEdit;
+    EdtCodProduto: TEdit;
+    EdtDescricao: TEdit;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCadProduto: TFrmCadProduto;
+
+implementation
+
+{$R *.dfm}
+
+end.
