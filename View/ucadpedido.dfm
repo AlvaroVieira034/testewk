@@ -16,6 +16,7 @@ inherited FrmCadPedido: TFrmCadPedido
   TextHeight = 13
   inherited PnlTopo: TPanel
     Width = 725
+    ExplicitWidth = 725
     inherited BtnInserir: TSpeedButton
       Left = 10
       Top = 11
@@ -67,7 +68,7 @@ inherited FrmCadPedido: TFrmCadPedido
     Align = alTop
     ExplicitLeft = 0
     ExplicitTop = 65
-    ExplicitWidth = 977
+    ExplicitWidth = 725
     ExplicitHeight = 208
     inherited GrbDados: TGroupBox
       Left = 6
@@ -78,7 +79,7 @@ inherited FrmCadPedido: TFrmCadPedido
       Caption = ' Dados da venda '
       ExplicitLeft = 6
       ExplicitTop = 4
-      ExplicitWidth = 742
+      ExplicitWidth = 710
       ExplicitHeight = 195
       object Label1: TLabel
         Left = 41
@@ -299,10 +300,10 @@ inherited FrmCadPedido: TFrmCadPedido
     Height = 297
     Align = alClient
     Anchors = []
-    ExplicitLeft = 27
-    ExplicitTop = 284
-    ExplicitWidth = 833
-    ExplicitHeight = 325
+    ExplicitLeft = 0
+    ExplicitTop = 273
+    ExplicitWidth = 725
+    ExplicitHeight = 297
     inherited LblTotRegistros: TLabel
       Left = 169
       Top = 174
@@ -318,7 +319,7 @@ inherited FrmCadPedido: TFrmCadPedido
       Caption = ' Vendas encontradas '
       ExplicitLeft = 6
       ExplicitTop = 6
-      ExplicitWidth = 742
+      ExplicitWidth = 710
       ExplicitHeight = 283
       object Label10: TLabel
         Left = 10

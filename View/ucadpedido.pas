@@ -637,6 +637,7 @@ begin
     GrbDados.Enabled := True;
     GrbGrid.Enabled:= False;
     BtnInserirItens.Enabled := False;
+    FClienteController.PreencherComboClientes(TblClientes);
     EdtCodClienteExit(Sender);
   end;
 end;
